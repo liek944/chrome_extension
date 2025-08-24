@@ -1,13 +1,21 @@
 <html>
     <head>
-        <link rel="stylesheet" href="index.css" />
+        <link rel="stylesheet" href="index.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     </head>
     <body>
-        <input type="text" id="input-el" />
+        <label>Enter URL:</label>
+        <input type="text" id="input-el" placeholder="https://scrimba.com">
         <button id="input-btn">SAVE INPUT</button>
-        <button id="tab-btn">SAVE TAB</button>
         <button id="delete-btn">DELETE ALL</button>
-        <ul id="ul-el"></ul>
-        <script src="index.js"></script>
+        <ul id="ul-el">
+        </ul>
+        <script type="module" src="index.js"></script>
     </body>
 </html>
+
+const firebaseConfig = {
+  // ... (other config properties like apiKey, projectId, etc. from your Firebase project)
+  databaseURL: "https://leads-tracker-app-8e172-default-rtdb.asia-southeast1.firebasedatabase.app",
+};

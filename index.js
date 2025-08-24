@@ -1,22 +1,26 @@
-let myLeads = [];
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import {
+  getDatabase,
+  ref,
+  push,
+  onValue,
+  remove
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+const firebaseConfig = {
+  // ... (other config properties like apiKey, projectId, etc. from your Firebase project)
+  databaseURL: "https://leads-tracker-app-8e172-default-rtdb.asia-southeast1.firebasedatabase.app",
+};
+
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const referenceInDB = ref(database, "leads");
+
 const inputEl = document.getElementById("input-el");
 const inputBtn = document.getElementById("input-btn");
 const ulEl = document.getElementById("ul-el");
 const deleteBtn = document.getElementById("delete-btn");
-const leadsFromLocalStorage = JSON.parse(localStorage.getItem("myLeads"));
-const tabBtn = document.getElementById("tab-btn");
-if (leadsFromLocalStorage) {
-  myLeads = leadsFromLocalStorage;
-  render(myLeads);
-}
-
-const tabs = [{ url: "https://www.linkedin.com/in/per-harald-borgen/" }];
-
-tabBtn.addEventListener("click", function () {
-  myLeads.push(tabs[0].url);
-  localStorage.setItem("myLeads", JSON.stringify(myLeads));
-  render(myLeads);
-});
 
 function render(leads) {
   let listItems = "";
@@ -32,15 +36,22 @@ function render(leads) {
   ulEl.innerHTML = listItems;
 }
 
+onValue(referenceInDB, function(snapshot){
+ const isSnapShotExist = snapshot.exist()
+  if (isSnapShotExist){
+const snapshotValues = snapshot.val()
+const leads = Object.values(snapshotValues)
+render(leads)
+  }
+
+})
+
 deleteBtn.addEventListener("dblclick", function () {
-  localStorage.clear();
-  myLeads = [];
-  render(myLeads);
+  remove(referenceInDB)
+  ulEl.innerHTML= ""
 });
 
 inputBtn.addEventListener("click", function () {
-  myLeads.push(inputEl.value);
+  push(referenceInDB, inputEl.value);
   inputEl.value = "";
-  localStorage.setItem("myLeads", JSON.stringify(myLeads));
-  render(myLeads);
 });
